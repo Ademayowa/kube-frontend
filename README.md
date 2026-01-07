@@ -33,7 +33,7 @@ Make sure you have the following installed on your machine:
 **Cloning the Repository**
 
 ```bash
-git clone https://github.com/Ademayowa/job-board-v3.git
+git clone https://github.com/Ademayowa/kube-frontend
 ```
 
 **Installation**

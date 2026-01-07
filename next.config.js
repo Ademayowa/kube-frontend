@@ -1,28 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  eslint: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors.
-    ignoreDuringBuilds: true,
-  },
-  images: {
-    remotePatterns: [
+  output: 'standalone',
+  // Add this to handle API calls to your backend
+  async rewrites() {
+    return [
       {
-        protocol: 'https',
-        hostname: 'job-boards.eu.greenhouse.io',
+        source: '/api/:path*',
+        destination:
+          process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/:path*',
       },
-      {
-        protocol: 'https',
-        hostname: 'jobs.ashbyhq.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'zendesk.wd1.myworkdayjobs.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'harfanglab-1666711819.teamtailor.com',
-      },
-    ],
+    ];
   },
 };
+
+module.exports = nextConfig;

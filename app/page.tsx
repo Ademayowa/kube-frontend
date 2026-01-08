@@ -14,13 +14,12 @@ type SearchProps = {
   };
 };
 
-export const revalidate = 60; // Revalidate the entire page every 60secs
+export const dynamic = 'force-dynamic';
 
 export default async function HomePage({ searchParams }: SearchProps) {
   const data = await fetchJobs(searchParams);
 
   if (!data) {
-    // Handle API failure from the backend if the server is down
     return (
       <>
         <Hero />
@@ -32,7 +31,11 @@ export default async function HomePage({ searchParams }: SearchProps) {
     );
   }
 
-  const { data: jobs, metadata } = data;
+  const jobs = Array.isArray(data) ? data : data.data || [];
+  const metadata = Array.isArray(data) ? null : data.metadata;
+
+  console.log('Jobs:', jobs);
+  console.log('Metadata:', metadata);
 
   const sortFilter = searchParams.sort || '';
   const searchQuery = searchParams.query || '';
@@ -48,7 +51,7 @@ export default async function HomePage({ searchParams }: SearchProps) {
               <p className='lg:text-lg text-[#707071] border bg-white px-4 py-2 rounded-md'>
                 Jobs
                 <span className='border border-[#62BECB] rounded px-2 ml-3'>
-                  {metadata?.total}
+                  {metadata?.total || jobs.length}
                 </span>
               </p>
 
@@ -56,20 +59,13 @@ export default async function HomePage({ searchParams }: SearchProps) {
                 <JobFilter />
               </div>
             </div>
-
             <Jobs
               initialJobs={jobs}
               filter={sortFilter}
               searchQuery={searchQuery}
             />
-
-            {/* <Pagination
-              currentPage={metadata?.current_page}
-              totalPages={metadata?.total_pages}
-            /> */}
           </div>
         ) : (
-          // Response for an unmatch job search to a user
           <Message className='py-16 text-center' message='No jobs found' />
         )}
       </BaseLayout>

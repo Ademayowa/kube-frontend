@@ -25,15 +25,18 @@ export default function Jobs({ initialJobs }: JobsProps) {
         const params = new URLSearchParams();
         if (searchQuery) params.set('query', searchQuery);
         if (sortFilter) params.set('sort', sortFilter);
-        
+
+        // Add timestamp to bust cache
+        params.set('_t', Date.now().toString());
+
         const response = await fetch(`/api/jobs?${params.toString()}`, {
           cache: 'no-store', // Add this - prevents browser caching
           headers: {
             'Cache-Control': 'no-cache, no-store, must-revalidate', // Add this
-            'Pragma': 'no-cache', // Add this for older browsers
+            Pragma: 'no-cache', // Add this for older browsers
           },
         });
-        
+
         const data = await response.json();
         setJobs(Array.isArray(data) ? data : data?.data || []);
       } catch (error) {
@@ -45,6 +48,8 @@ export default function Jobs({ initialJobs }: JobsProps) {
 
     fetchFilteredJobs();
   }, [searchQuery, sortFilter]);
+
+  console.log(jobs);
 
   return (
     <>

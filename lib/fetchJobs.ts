@@ -12,13 +12,22 @@ export default async function fetchJobs(searchParams: {
     limit: '10',
   }).toString();
 
+  const url = `${API_URL}/jobs?${query}`;
+  console.log('Fetching from:', url);
+
   try {
-    const res = await fetch(`${API_URL}/jobs?${query}`, {
-      cache: 'no-store', // Add this - prevents Next.js caching
-      next: { revalidate: 0 }, // Add this - no revalidation caching
+    const res = await fetch(url, {
+      cache: 'no-store',
     });
-    
-    if (!res.ok) throw new Error('Failed to fetch jobs');
+
+    console.log('Response status:', res.status);
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      console.log('Error response:', errorText);
+      throw new Error('Failed to fetch jobs');
+    }
+
     const responseData = await res.json();
     return responseData;
   } catch (error) {

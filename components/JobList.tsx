@@ -21,6 +21,15 @@ export default function JobList({ jobs }: JobListProps) {
             </h2>
           </div>
 
+          <div className='flex flex-col gap-2 space-y-1'>
+            <div className='mt-2 flex items-center space-x-1'>
+              <MapPin className='h-5 w-5 text-[#62BECB] -ml-1' />
+              <p className='text-[#707071]'>{job.location}</p>
+            </div>
+
+            <p className='text-[#0F4A7B]'>${job.salary}</p>
+          </div>
+
           <p className='text-[#707071] mt-5 !w-full md:w-4/5 leading-8 line-clamp-3'>
             {job.description}
           </p>

@@ -30,10 +30,10 @@ export default function Jobs({ initialJobs }: JobsProps) {
         params.set('_t', Date.now().toString());
 
         const response = await fetch(`/api/jobs?${params.toString()}`, {
-          cache: 'no-store', // Add this - prevents browser caching
+          cache: 'no-store',
           headers: {
-            'Cache-Control': 'no-cache, no-store, must-revalidate', // Add this
-            Pragma: 'no-cache', // Add this for older browsers
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            Pragma: 'no-cache',
           },
         });
 
